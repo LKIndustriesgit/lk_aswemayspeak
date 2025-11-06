@@ -1,0 +1,25 @@
+{
+  "origin": "#p# #verb.ed#. #n.s# #verb#",
+  "p": [
+    "we",
+    "I",
+    "she",
+    "he",
+    "you"
+  ],
+  "n": [
+    "fish",
+    "goose",
+    "child"
+  ],
+  "verb": [
+    "think",
+    "speak",
+    "see",
+    "dream",
+    "hear"
+  ],
+  "origin": ["[myNoun:#n#] #myNoun.a.capitalize# #subsentence# #subsentence#."],
+  "n": ["rose","moon","apple"],
+  "subsentence": ["is #myNoun.a#"],
+}
