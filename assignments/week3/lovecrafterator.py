@@ -1,3 +1,4 @@
+# this is meant to be an ironic attempt at copying H. P. Lovecrafts' style and condesing it to its bare minimum
 import tracery as tr
 import spacy as spacy
 import random
