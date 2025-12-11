@@ -13,27 +13,23 @@ books = [
     'Platos Republic',
 ]
 
-# global state for one game
 guesses = 3
 random_choice = None
 vocab_from_file = []
 flag = False
 
 def nearest_neighbors(target, vocab, k=5):
-    """
-    Find the nearest neighbors of a target word within a vocab
-    vocab needs to be a list of strings
-    """
-    query = nlp(target)[0]  # token
+    query = nlp(target)[0]
     scores = {}
     for w in vocab:
-        if w == target:  # skip the same word
+        if w == target:
             continue
         token = nlp.vocab[w]
         if token.has_vector:
             score = query.similarity(token)
             scores[w] = score
     top = sorted(scores.items(), key=lambda x: -x[1])[:k]
+
     return top
 
 def gamestart():
@@ -41,8 +37,12 @@ def gamestart():
     random_choice = random.choice(books)
     with open("../week5/books/" + random_choice, encoding="utf8") as f:
         text = f.read()
-    # you can clean this later; for now keep your split
-    vocab_from_file = text.split(" ")
+    doc = nlp(text)
+    vocab_from_file = list({
+        token.text.lower()
+        for token in doc
+        if not token.is_stop and token.is_alpha and token.has_vector
+    })
     flag = True
     guesses = 3
 
@@ -65,6 +65,8 @@ def play_game():
     print("Example:")
     print("word = house. Words by AI = 'Mansion' (1.003), 'castle' (0.921), \n 'room' (0.850), 'shed' (0.842), 'live' (0.770)")
     print("conclusion: The book has a setting with castles and mansions in it")
+    time.sleep(1)
+    print("stop words (common non-descriptive words like 'I' and 'the') are filtered out of the book, as they do not add any evidence")
     time.sleep(1)
     print("You didnt understand this tutorial?")
     time.sleep(0.5)
@@ -100,7 +102,7 @@ def play_game():
             print("The correct book was " + random_choice)
     print("Thank you for playing!")
 
-# main loop
+
 while True:
     play_game()
     restart = input("Do you want to play again? (y/n) ").strip().lower()
