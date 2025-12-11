@@ -4,7 +4,7 @@ import spacy as spacy
 import random
 from tracery.modifiers import base_english
 
-text = open("../week3/hpl").read()
+text = open("../week5/books/At the Mountains of Madness").read()
 nlp = spacy.load("en_core_web_md")
 full_doc = nlp(text)
 

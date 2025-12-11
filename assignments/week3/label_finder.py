@@ -5,7 +5,7 @@ from spacy.lang.en.stop_words import STOP_WORDS
 from collections import Counter
 nlp = spacy.load('en_core_web_md')
 
-text = open("../week3/hpl").read()
+text = open("../week5/books/At the Mountains of Madness").read()
 full_doc = nlp(text)
 
 all_words =  [token for token in full_doc if token.is_alpha]
