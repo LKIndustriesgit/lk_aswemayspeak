@@ -1,7 +1,13 @@
+#adding an algorithm for cutting out names somehow?
+#Somehow increasing the clues given at each guess
+#Is the sentence real or generated? With SpaCy sentence structure for each Book
+#Better wrapping it all up into one game with more replayability
+# Including more books, uploading own books somehow?, score, leaderboard. More like Wordle?
+
 import spacy
 import time
 import random
-
+from collections import defaultdict
 print("loading game...")
 nlp = spacy.load("en_core_web_md")
 
@@ -33,7 +39,7 @@ def nearest_neighbors(target, vocab, k=5):
     return top
 
 def gamestart():
-    global random_choice, vocab_from_file, flag, guesses
+    global random_choice, vocab_from_file, flag, guesses, transitions, tokens
     random_choice = random.choice(books)
     with open("../week5/books/" + random_choice, encoding="utf8") as f:
         text = f.read()
@@ -45,6 +51,24 @@ def gamestart():
     })
     flag = True
     guesses = 3
+    tokens = [t.text for t in doc if not t.is_space]
+    transitions = defaultdict(list)
+    for w1, w2 in zip(tokens, tokens[1:]):
+        transitions[w1].append(w2)
+def generate_sentence(max_len=20):
+    current = random.choice([w for w in tokens if w[0].isupper()])
+    sentence = [current]
+
+    for _ in range(max_len - 1):
+        next_words = transitions.get(current)
+        if not next_words:
+            break
+        current = random.choice(next_words)
+        sentence.append(current)
+        if current.endswith(('.', '!', '?')):
+            break
+
+    return " ".join(sentence)
 
 def play_game():
     global flag, guesses
@@ -79,9 +103,12 @@ def play_game():
     while flag:
         if guesses > 0:
             print("Guesses left: " + str(guesses))
-            word = input('\n(write "s" to stop)\nWord in the grammar of text: ').strip().lower()
+            word = input('\n(write "s" to stop, write "c" to see generated sentence in style.)\nWord in the grammar of text: ').strip().lower()
             if word == "s":
                 flag = False
+            if word == "c":
+                print(generate_sentence())  # or random.choice(sentences)
+                guesses -= 1
             else:
                 neighbor = nearest_neighbors(word, vocab_from_file, 5)
                 print(neighbor)
