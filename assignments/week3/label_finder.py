@@ -8,7 +8,7 @@ nlp = spacy.load('en_core_web_md')
 text = open("../week5/books/At the Mountains of Madness").read()
 full_doc = nlp(text)
 
-all_words =  [token for token in full_doc if token.is_alpha]
+#all_words =  [token for token in full_doc if token.is_alpha]
 #word_count = Counter([w.text for w in all_words])
 #print("most common words: \n")
 #print(word_count.most_common(10))
