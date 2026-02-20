@@ -33,6 +33,7 @@ from collections import Counter
 from datetime import datetime
 import os
 import json
+import markovify
 print("loading game...")
 nlp = spacy.load("en_core_web_md")
 books = [ ]
@@ -88,7 +89,7 @@ def nearest_neighbors(target, vocab, k=5):
     return top
 
 def gamestart():
-    global random_choice, vocab_from_file, flag, clues, transitions, tokens, top_names, doc
+    global random_choice, vocab_from_file, flag, clues, transitions, tokens, top_names, doc,  anonymized_text
     random_choice = random.choice(books)
     with open("../final_project/books/" + random_choice, encoding="utf8") as f:
         text = f.read()
@@ -136,11 +137,12 @@ def generate_sentence(max_len=20):
     return " ".join(sentence)
 
 def play_game():
-    global flag, clues, d
+    global flag, clues, d,  anonymized_text
     won = False
     flag2 = False
     gamestart()
     lb = LeaderBoard()
+    text_model = markovify.Text( anonymized_text, state_size=3)
     print("++++++++++++++++++++++++++++++++++")
     print("Welcome to the Book Guessing Game!")
     time.sleep(TICK)
@@ -189,7 +191,8 @@ def play_game():
             result = True
             flag = False
         if word == "c":
-            print(generate_sentence())
+            #print(generate_sentence())
+            print(text_model.make_sentence(tries=100))
             clues += 1
         if word == "d":
             if not d:
