@@ -21,6 +21,9 @@
 # Maybe saying if youre ta<king too long
 # also rewarding in the end if someone is great to not just opunish them^
 
+# guess only works if correct letter by letter and capitalisation.
+# Ask if tutorial is needed at the beginning
+# add quadrigrams
 import spacy
 from spacy.lang.en.stop_words import STOP_WORDS
 import time
@@ -104,7 +107,8 @@ def gamestart():
                                anonymized_text[ent.end_char:])
 
     doc = nlp(anonymized_text)
-
+    stop_extras = ["Baloo", "Two Tails", ] # all missed person names and too easy words i encounter
+    STOP_WORDS.update(stop_extras) # during testing will be added here
     vocab_from_file = list({
         token.text.lower()
         for token in doc
@@ -133,7 +137,8 @@ def generate_sentence(max_len=20):
 
 def play_game():
     global flag, clues, d
-
+    won = False
+    flag2 = False
     gamestart()
     lb = LeaderBoard()
     print("++++++++++++++++++++++++++++++++++")
@@ -201,18 +206,25 @@ def play_game():
             clues += 0.5
 
 
-    if result:
+    while result:
         print("Which of the following books is the one in question:")
         print(books)
         book = input("Guess: ")
-        if book == random_choice:
+        if book.lower() == random_choice.lower():
             print("You guessed correctly!")
             print("You won.")
+            won = True
+            result = False
+        if book.lower() not in (b.lower() for b in books):
+            print("Your guess seems not to be on the list. Did you spell it correctly?")
         else:
             print("You didn't guess correctly!")
             print("The correct book was " + random_choice)
+            won = False
+            result = False
     print("Thank you for playing!")
-    flag2 = True
+    if won:
+        flag2 = True
     while flag2:
         scoring = input("do you want to safe your score?(y/n)")
         if scoring == "y":
