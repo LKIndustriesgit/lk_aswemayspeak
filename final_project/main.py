@@ -204,9 +204,10 @@ def play_game():
                 print("you have already requested the most common words!")
 
         else:
-            neighbor = nearest_neighbors(word, vocab_from_file, 5)
-            print(neighbor)
-            clues += 0.5
+            if len(word) > 1:
+                neighbor = nearest_neighbors(word, vocab_from_file, 5)
+                print(neighbor)
+                clues += 0.5
 
 
     while result:
@@ -221,10 +222,11 @@ def play_game():
         if book.lower() not in (b.lower() for b in books):
             print("Your guess seems not to be on the list. Did you spell it correctly?")
         else:
-            print("You didn't guess correctly!")
-            print("The correct book was " + random_choice)
-            won = False
-            result = False
+            if book.lower() != random_choice.lower():
+                print("You didn't guess correctly!")
+                print("The correct book was " + random_choice)
+                won = False
+                result = False
     print("Thank you for playing!")
     if won:
         flag2 = True
