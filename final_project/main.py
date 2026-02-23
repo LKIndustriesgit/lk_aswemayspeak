@@ -24,6 +24,8 @@
 # guess only works if correct letter by letter and capitalisation.
 # Ask if tutorial is needed at the beginning
 # add quadrigrams
+# change tutorial (e. g. add filtered out person names)
+# change up code to make it more presentable
 import spacy
 from spacy.lang.en.stop_words import STOP_WORDS
 import time
@@ -114,7 +116,9 @@ def gamestart():
                                anonymized_text[ent.end_char:])
 
     doc = nlp(anonymized_text)
-    stop_extras = ["Baloo", "Two Tails", ] # all missed person names and too easy words i encounter
+    stop_extras = ["Baloo", "Two Tails", "shoggoth", "sibyl", "chapter", "section", "socrates,—those",
+                   "polemarchus,—thrasymachu", "polemarchus", "lachesis", "sophist", "hellene", "kaa",
+                   "nag" ] # all missed person names and too easy words i encounter + words from algorithm
     STOP_WORDS.update(stop_extras) # during testing will be added here
     vocab_from_file = list({
         token.text.lower()
