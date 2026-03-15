@@ -41,7 +41,7 @@ class LeaderBoard:
             # all important information is already saved in vars, time is saved the moment one tries to guess the book
         )
         self.entries.sort(
-            key=lambda e: (-e["clues"], -e["time"]))  # sorting the leaderboard after fewest clues and fastest time
+            key=lambda e: (e["clues"], e["time"]))  # sorting the leaderboard after fewest clues and fastest time
         with open("leaderboard.json", "w", encoding="utf-8") as f:
             json.dump(self.entries, f, indent=2)  # opening the leaderboard to add the new entries, this time as 'w',
             # even creating a new file if no file exists in the first place
